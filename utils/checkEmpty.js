@@ -4,7 +4,7 @@ exports.checkEmpty=(config)=>{
     let isError =false
     const error=[]
 for (const key in config) {
-   if (vlaidator.isEmpty( config[key] ?config[key]:" ")) { //isEmpty(config.mobile) isEmpty(config.address)
+   if (vlaidator.isEmpty( config[key] ?toString(config[key]):" ")) { //isEmpty(config.mobile) isEmpty(config.address)
     //                                              👆ye isliye kiya q k validator string leta hai undefine 
     //                                               aaya to error leta hai to key nhi mile to usko
     //                                                 string bhejna hai bolk " "empty string ki condition lagai 
