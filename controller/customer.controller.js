@@ -45,12 +45,12 @@ exports.getRestoInfo=asyncHandler(async(req,res)=>{
     // const {email}=req.body
     const result = await Resturant.find({isActive:true}).select("-password -createdAt -updatedAt -__v -certificate -isActive  -infocomplete"
     )
-    res.status().json({message:"find resto success",result})
+    res.json({message:"find resto success",result})
 
 })
 exports.getRestoMenu=asyncHandler(async(req,res)=>{
     // const {email}=req.body
     const result = await Menu.find({resturant:req.params.rid}).select("-createdAt -updatedAt -__v")
-    res.status().json({message:"menu fetch  success",result})
+    res.json({message:"menu fetch  success",result})
 
 })
