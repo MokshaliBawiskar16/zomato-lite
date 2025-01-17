@@ -4,6 +4,7 @@ const { checkEmpty } = require("../utils/checkEmpty")
 const Customer = require("../modals/Customer")
 const Resturant = require("../modals/Resturant")
 const Menu = require("../modals/Menu")
+const Order = require("../modals/Order")
 exports.getLoction=asyncHandler(async(req,res)=>{
     const {latitude,longitude}=req.body
    const {isError,error}= checkEmpty({latitude,longitude})
@@ -52,5 +53,24 @@ exports.getRestoMenu=asyncHandler(async(req,res)=>{
     // const {email}=req.body
     const result = await Menu.find({resturant:req.params.rid}).select("-createdAt -updatedAt -__v")
     res.json({message:"menu fetch  success",result})
+
+})
+exports.PlaceOrder=asyncHandler(async(req,res)=>{
+    const {resturant,items}=req.body
+    const {error,isError}=checkEmpty({resturant,items})
+    if (isError) {
+        return res.status(400).json({message:"all filed require"})
+    }
+ await Order.create({resturant,items,customer:req.user})
+    res.json({message:"order plsce success"})
+
+})
+exports.getOrder=asyncHandler(async(req,res)=>{
+  
+    const result= await Order
+  .find({customer:req.user}).select("-customer -createdAt -updatedAt -__v ")
+  .populate("resturant","name  hero")
+  .populate("items.dish","name type image price ")
+   res.json({message:"order fetch success",result})
 
 })
