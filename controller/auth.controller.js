@@ -9,6 +9,7 @@ const { differenceInSeconds } = require("date-fns")
 const { sendSMS } = require("../utils/sms")
 const Resturant = require("../modals/Resturant")
 const Customer = require("../modals/Customer")
+const Rider = require("../modals/Rider")
 //admin ragister
 exports.registerAdmin= asyncHandler(async(req,res)=>{
     const {name,email,mobile}=req.body
@@ -214,4 +215,36 @@ exports.logoutCustomer=asyncHandler(async(req,res)=>{
   
   })
 //rider login
+exports.loginRider=asyncHandler(async(req,res)=>{
+  const {userName,password}=req.body
+const result=await Rider.findOne({$or :[{email :userName},{mobile :userName}]})
+                              // 👆 mongo ch or operater =>check kartay username :email OR mobile aahe
+   if (!result) {
+  return res.status(400).json({message:"invalid credentials"})
+}
+
+ const comparPass= await bcrypt.compare(password,result.password)
+ if (!comparPass) {
+     return res.status(409).json({mesage:"invalid credential password"})
+ }
+ const token= jwt.sign({id:result.id},process.env.JWT_SECRET)
+ res.cookie("zomato-rider",token,{
+  maxAge:1000*60*60*24,
+  httpOnly:true,
+  secure: process.env.NODE_ENV === "production"
+
+ })
+ res.json({message:"resturant Login success", result: {
+  _id: result._id,
+  name: result.name,
+  email: result.email,
+  infocomplete:result.infocomplete
+}})
+
+})
 //rider logout
+exports.logoutRider=asyncHandler(async(req,res)=>{
+  res.clearCookie("zomato-rider")
+  res.json({message:"logout Rider success"})
+  
+  })

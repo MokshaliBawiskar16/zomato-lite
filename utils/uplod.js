@@ -10,8 +10,12 @@ const resturantUplod=multer({storage}).fields([
     {name:"hero",maxCount:1}
 ])
 
+const riderUpload = multer({ storage }).fields([
+    { name: "licence", maxCount: 1 },
+    { name: "rc", maxCount: 1 }
+])
 // single file asile tr asa karta
 const menuUplod=multer({storage}).array("image")
 const updateMenuUplod=multer({storage}).single("image")
 
-module.exports={resturantUplod,menuUplod,updateMenuUplod}
+module.exports={resturantUplod,menuUplod,updateMenuUplod,riderUpload}
