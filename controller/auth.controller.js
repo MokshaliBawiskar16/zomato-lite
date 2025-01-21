@@ -216,30 +216,34 @@ exports.logoutCustomer=asyncHandler(async(req,res)=>{
   })
 //rider login
 exports.loginRider=asyncHandler(async(req,res)=>{
-  const {userName,password}=req.body
-const result=await Rider.findOne({$or :[{email :userName},{mobile :userName}]})
-                              // 👆 mongo ch or operater =>check kartay username :email OR mobile aahe
-   if (!result) {
-  return res.status(400).json({message:"invalid credentials"})
-}
+  const { userName, password } = req.body
+  console.log(req.body);
 
- const comparPass= await bcrypt.compare(password,result.password)
- if (!comparPass) {
-     return res.status(409).json({mesage:"invalid credential password"})
- }
- const token= jwt.sign({id:result.id},process.env.JWT_SECRET)
- res.cookie("zomato-rider",token,{
-  maxAge:1000*60*60*24,
-  httpOnly:true,
-  secure: process.env.NODE_ENV === "production"
+  const result = await Rider.findOne({ $or: [{ email: userName }, { mobile: userName }] })
+  if (!result) {
+      return res.status(401).json({ message: "invalid credentials " })
+  }
+  const isVerify = await bcrypt.compare(password, result.password)
+  if (!isVerify) {
+      return res.status(401).json({ message: "invalid credentials password" })
+  }
 
- })
- res.json({message:"resturant Login success", result: {
-  _id: result._id,
-  name: result.name,
-  email: result.email,
-  infocomplete:result.infocomplete
-}})
+  const token = jwt.sign({ _id: result._id }, process.env.JWT_SECRET, { expiresIn: "1d" })
+
+  res.cookie("zomato-rider", token, {
+      maxAge: 1000 * 60 * 60 * 24,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production"
+  })
+
+  res.json({
+      message: "rider login success", result: {
+          _id: result._id,
+          name: result.name,
+          email: result.email,
+          infoComplete: result.infoComplete,
+      }
+  })
 
 })
 //rider logout
