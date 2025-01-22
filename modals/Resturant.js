@@ -3,16 +3,18 @@ const mongoose=require("mongoose")
 const resturantScheema=new mongoose.Schema({
 name:{type:String,required:true},
 email:{type:String,required:true},
-mobile:{type:String,required:true},
 password:{type:String,required:true},
-address:{type:String,required:true},
-city:{type:String,required:true},
-certificate:{type:String,required:true},
-type:{type:String,enum:["veg","non-veg"],required:true,default:"veg"},
-hero:{type:String,required:true},
-startTime:{type:String,required:true},
-endTime:{type:String,required:true},
-isActive:{type:Boolean,default:false,required:true},
+
+mobile:{type:String},
+address:{type:String},
+city:{type:String},
+certificate:{type:String},
+type:{type:String,enum:["veg","non-veg"],},
+hero:{type:String},
+
+startTime:{type:String},
+endTime:{type:String},
+isActive:{type:Boolean,default:false},
 infocomplete:{type:Boolean,default:false},
 },{timestamps:true})
 module.exports=mongoose.model("resturant",resturantScheema)

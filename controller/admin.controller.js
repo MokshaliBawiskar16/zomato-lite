@@ -1,5 +1,4 @@
 const Customer = require("../modals/Customer")
-const Order = require("../modals/Customer")
 const Resturant = require("../modals/Resturant")
 const asyncHandler = require("express-async-handler")
 
@@ -8,6 +7,7 @@ const bcrypt =require("bcryptjs")
 const cloud =require("./../utils/cloudinary")
 const {checkEmpty} =require("./../utils/checkEmpty")
 const {riderUpload} =require("./../utils/uplod")
+const Order = require("../modals/Order")
 
 
 exports.getAdminResturant = asyncHandler(async (req,res)=>{
@@ -27,13 +27,18 @@ exports.getAdminCustomer = asyncHandler(async (req,res)=>{
 })
 
 exports.getAdminOrder = asyncHandler(async (req,res)=>{
-    const result = await Order
-    .find(req.body)
-    .select(" -createdAt -updatedAt -__v -_id")
+    const{limit,skip}=req.query
+    const total = await Order.countDocuments()
+    const result = await Order.find(req.body)
+    .select(" -createdAt -updatedAt -__v")
     .populate("resturant","name email mobile")
     .populate("customer","name email mobile")
+    .populate("rider","name mobile")
+
     .populate("items.dish","name type price")
-    .sort({createdAt: -1})
+    .sort({createdAt:-1})
+    .limit(limit)
+    .skip(skip)
     res.json({message:"order fetch success",result:{
         orders:result,
         total
@@ -131,3 +136,17 @@ exports.updateRiderAccount = asyncHandler(async (req,res)=>{
    await Rider.findByIdAndUpdate(rid,{isActive: req.body.isActive})
    res.json({message:"rider account Update"})
   })
+
+  exports.getAdminActiveRider = asyncHandler(async (req,res)=>{
+    // const {limit,skip} = req.query
+    // const total = await Rider.countDocuments()
+    const result = await Rider
+    .find({isActive: true})//aise rider jo active hai
+    .select("-password -createdAt -updatedAt -__v")
+    res.json({message:"rider fetch success",result})
+})
+  exports.assigningRider = asyncHandler(async (req,res)=>{
+    const {oid} = req.params
+    const result = await Order.findByIdAndUpdate(oid,{rider:req.body.rider})
+    res.json({message:"rider assigning success",result})
+})

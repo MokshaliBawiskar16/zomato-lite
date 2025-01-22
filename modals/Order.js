@@ -12,7 +12,9 @@ items:[ //multiple menu order honege bolk array liya[]
 rider:{type:mongoose.Types.ObjectId,ref:"rider"},//kise rider ko assigne kiya tha
 
 status:{
-    type:String,enum:["placed","cooking","packing","out","delivered"]
+    type:String,
+    default:"placed",
+    enum:["placed","cooking","packing","out","delivered"]
 }
 
 },{timestamps:true})
