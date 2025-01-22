@@ -11,7 +11,7 @@ exports.getRiderOrder = asyncHandler(async (req, res) => {
         .find({ rider: req.user })
         .select("-rider -createdAt -updatedAt -__v")
         .populate("customer", "name mobile address")
-        .populate("resturant", "name hero")
+        .populate("resturant", "name hero mobile address")
         .populate("items.dish", "name type image price")
         .sort({ createdAt: -1 })
     res.json({ message: "order fetch success", result })
