@@ -5,11 +5,13 @@ const cors=require("cors")
 const cookieParser=require("cookie-parser")
 const { resturantProtected, customerProtected, adminProtected, riderProtected } = require("./middlewares/protected")
 const { httpServer, app } = require("./socket/socket")
+const path=require("path")
 
 // const app=express()
 
 app.use(express.json())//req.body
 app.use(cookieParser())//req.cookies
+app.use(express.static("dist"))
 
 app.use(cors({
     origin:true,
@@ -22,7 +24,8 @@ app.use("/api/customer",customerProtected,require("./routes/customer.routes"))
 app.use("/api/admin",adminProtected,require("./routes/admin.routes"))
 app.use("/api/rider",riderProtected,require("./routes/rider.routes"))
 app.use("*",(req,res)=>{
-    res.status(404).json({message:"resourece not found"})
+    // res.status(404).json({message:"resourece not found"})
+    res.sendFile(path.join(__dirname,"dist","index.html"))
 })
 
 app.use((err,req,res,next)=>{
