@@ -71,6 +71,7 @@ exports.getOrder=asyncHandler(async(req,res)=>{
   
     const result= await Order
   .find({customer:req.user,status: { $ne: "delivered" }}).select("-customer -createdAt -updatedAt -__v ")
+  io.emit("hide-deliveredorder")
   .populate("resturant","name  hero")
   .populate("rider","name  mobile")
   .populate("items.dish","name type image price ")
