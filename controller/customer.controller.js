@@ -5,6 +5,7 @@ const Customer = require("../modals/Customer")
 const Resturant = require("../modals/Resturant")
 const Menu = require("../modals/Menu")
 const Order = require("../modals/Order")
+const { io } = require("../socket/socket")
 exports.getLoction=asyncHandler(async(req,res)=>{
     const {latitude,longitude}=req.body
    const {isError,error}= checkEmpty({latitude,longitude})
@@ -62,6 +63,7 @@ exports.PlaceOrder=asyncHandler(async(req,res)=>{
         return res.status(400).json({message:"all filed require"})
     }
  await Order.create({resturant,items,customer:req.user})
+ io.emit("palce-order")
     res.json({message:"order plsce success"})
 
 })
