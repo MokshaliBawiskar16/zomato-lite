@@ -21,7 +21,9 @@ exports.getRiderOrder = asyncHandler(async (req, res) => {
 exports.updateOrderStatus = asyncHandler(async (req, res) => {
     const {oid}=req.params
     await Order.findByIdAndUpdate(oid,{status:req.body.status})
+    const result =await Order.find()
     io.emit("status-update")
+    io.emit("hide-deliveredorder",result)
     res.json({ message: "order status update success" })
 })
 
