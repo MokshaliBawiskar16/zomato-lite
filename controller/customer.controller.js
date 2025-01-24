@@ -75,7 +75,7 @@ exports.getOrder=asyncHandler(async(req,res)=>{
   .populate("resturant","name  hero")
   .populate("rider","name  mobile")
   .populate("items.dish","name type image price ")
-  io.emit("hide-deliveredorder")
+  io.emit("hide-deliveredorder",result)
    res.json({message:"order fetch success",result})
 
 })
