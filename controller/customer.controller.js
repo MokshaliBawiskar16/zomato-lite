@@ -78,3 +78,14 @@ exports.getOrder=asyncHandler(async(req,res)=>{
    res.json({message:"order fetch success",result})
 
 })
+exports.getHistoryOrder=asyncHandler(async(req,res)=>{
+  
+    const result= await Order
+  .find({customer:req.user,status: "delivered" }).select("-customer -createdAt -updatedAt -__v ")
+  .populate("resturant","name  hero")
+  .populate("rider","name  mobile")
+  .populate("items.dish","name type image price ")
+  io.emit("history-order")
+   res.json({message:"order fetch success",result})
+
+})
