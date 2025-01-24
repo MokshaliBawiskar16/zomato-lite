@@ -7,6 +7,7 @@ const Resturant = require("../modals/Resturant")
 const Menu = require("../modals/Menu")
 const path=require("path")
 const Order = require("../modals/Order")
+const { io } = require("../socket/socket")
 
  exports.updateInfo =asyncHandler(async(req,res)=>{
     resturantUplod(req,res,async(err)=>{
@@ -130,7 +131,7 @@ exports.getResturantOrders = asyncHandler(async (req, res) => {
 })
 exports.updateResturantStatus = asyncHandler(async (req, res) => {
     await Order.findByIdAndUpdate(req.params.oid, { status: req.body.status })
-
+    io.emit("status-updateResto")
     res.json({ message: "order status change success" })
 })
 
