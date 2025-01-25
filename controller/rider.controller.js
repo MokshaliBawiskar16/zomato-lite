@@ -27,7 +27,7 @@ exports.updateOrderStatus = asyncHandler(async (req, res) => {
      .populate("rider","name  mobile")
      .populate("items.dish","name type image price ")
     io.emit("status-update",result)
-    io.emit("hide-deliveredorder",result)
+    // io.emit("hide-deliveredorder",result)
     res.json({ message: "order status update success" })
 })
 

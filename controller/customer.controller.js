@@ -75,7 +75,7 @@ exports.getOrder=asyncHandler(async(req,res)=>{
   .populate("resturant","name  hero")
   .populate("rider","name  mobile")
   .populate("items.dish","name type image price ")
-  io.emit("hide-deliveredorder",result)
+//   io.emit("hide-deliveredorder",result)
    res.json({message:"order fetch success",result})
 
 })
@@ -86,7 +86,7 @@ exports.getHistoryOrder=asyncHandler(async(req,res)=>{
   .populate("resturant","name  hero")
   .populate("rider","name  mobile")
   .populate("items.dish","name type image price ")
-  io.emit("history-order")
+//   io.emit("history-order")
    res.json({message:"order History fetch success",result})
 
 })
