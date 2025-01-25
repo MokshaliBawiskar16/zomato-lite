@@ -135,6 +135,9 @@ exports.updateAdminRider = asyncHandler(async (req,res)=>{
 exports.updateRiderAccount = asyncHandler(async (req,res)=>{
    const {rid}=req.params
    await Rider.findByIdAndUpdate(rid,{isActive: req.body.isActive})
+   if (!req.body.isActive) {
+     io.emit("rider-logout")
+   }
    res.json({message:"rider account Update"})
   })
 
